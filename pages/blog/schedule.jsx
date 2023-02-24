@@ -1,9 +1,14 @@
 
+
 import Container from 'components/Container'
 import { getPostBySlug } from 'lib/api'
 import PostHeader from 'components/PostHeader'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
+import { TwoColumn, TwoColumnMain, TwoColumnSidebar } from 'components/TwoColumn'
+import PostBody from 'components/PostBody'
+import ConvertBody from 'components/ConvertBody'
+import PostCategories from 'components/PostCategories'
 
 export default function Schedule({
   title,
@@ -22,13 +27,25 @@ export default function Schedule({
           <Image
             src={ eyecatch.url }
             alt=''
-            layout='responsive'
+            layout='responsive' //Next v13よりlayoutが非推奨:修正対象
             width={eyecatch.width}
             height={eyecatch.height}
             sizes="(min-width: 1152px) 1152px, 100vw"
             priority
           />
         </figure>
+
+        <TwoColumn>
+          <TwoColumnMain>
+            <PostBody>
+              {/* <div dangerouslySetInnerHTML={{__html: content}} /> スタイルが適用できない。XSSされないようサニタイズが必要 */}
+              <ConvertBody contentHTML={content} />
+            </PostBody>
+          </TwoColumnMain>
+          <TwoColumnSidebar>
+            <PostCategories categories={categories} />
+          </TwoColumnSidebar>
+        </TwoColumn>
       </article>
     </Container>
   )
